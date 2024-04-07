@@ -1,7 +1,8 @@
 from django.urls import path, re_path, include
 
 # from .views import *
-from .generateApiView import *
+# from .generateApiView import *
+from .mixinView import *
 
 urlpatterns = [
     # path("userInfo/", UserInfoView.as_view()),

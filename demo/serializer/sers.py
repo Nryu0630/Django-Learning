@@ -32,6 +32,6 @@ class UserSerializer2(serializers.ModelSerializer):
     class Meta:
         model = UserInfo
         # 定义针对哪些字段进行序列化
-        fields = "__all__"
+        # fields = "__all__"
         # fields = ['name','age']
-        # exclude = ["age"]
+        exclude = ["age"]
