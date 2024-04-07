@@ -1,5 +1,9 @@
 from rest_framework import serializers
 from ..models import UserInfo
+<<<<<<< HEAD
+=======
+
+>>>>>>> 259d3de4da3836d4a60c4d03482e44e6194a545c
 
 # 序列化器的字段类型用于数据校验
 class UserSerializer(serializers.Serializer):

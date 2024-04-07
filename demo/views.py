@@ -10,6 +10,7 @@ from rest_framework.response import Response
 class UserInfoView(APIView):
 
     def get(self, request):
+
         # 获取所有结果
         user_info = UserInfo.objects.all()
 
