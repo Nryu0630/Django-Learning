@@ -44,11 +44,11 @@ class UserInfoView(APIView):
         # 进行数据校验
         # 返回一个bool值，所有字段校验都通过返回True
         # 生成validated_data errors两个属性,挂载在serializer实例上
-        # 校验时是按照序列化器的键名进行循环校验       
+        # 校验时是按照序列化器的键名进行循环校验
         if serializer.is_valid():
             # 校验成功
             # new_list = UserInfo.objects.create(**serializer.validated_data)
-            
+
             # 通过查看源码,序列化时实际上是在对self.instance进行序列化
             # 因此如果自定义的create方法没有return结果值,self.instancce就会为空
             # 导致serializer.data无法正常拿到结果
@@ -58,3 +58,35 @@ class UserInfoView(APIView):
         else:
             # 校验失败
             return Response(serializer.errors)
+
+
+# 对于对单条记录做操作的接口会多一个id参数
+# 同时一个类中不可以有两个get方法
+class UserInfoDetailView(APIView):
+
+    def get(self, request, id):
+        user_info = UserInfo.objects.get(pk=id)
+        serializer = UserSerializer(isinstance=user_info, many=False)
+        return Response(serializer.data)
+
+    def put(self, request, id):
+        # 获取提交的更新数据
+        print("data:", request.data)
+        update_info = UserInfo.objects.get(pk=id)
+
+        # 构建序列化器对象
+        serializer = UserSerializer(instance=update_info, data=request.data)
+
+        if serializer.is_valid():
+            # 更新逻辑
+            UserInfo.objects.filter(pk=id).update(**serializer.validated_data)
+            # 获取更新后的数据，返回给客户端
+            updated_info = UserInfo.objects.filter(pk=id)
+            serializer.instance = updated_info
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+    def delete(self, request, id):
+        UserInfo.objects.get(pk=id).delete()
+        return Response()
