@@ -31,6 +31,8 @@ class UserInfoView(APIView):
             tmp.append(d)
             
         """
+
+        # serializer.data时才真正执行序列化操作
         return Response(serializer.data)
 
     def post(self, request):
@@ -41,9 +43,16 @@ class UserInfoView(APIView):
         # 进行数据校验
         # 返回一个bool值，所有字段校验都通过返回True
         # 生成validated_data errors两个属性,挂载在serializer实例上
+        # 校验时是按照序列化器的键名进行循环校验       
         if serializer.is_valid():
             # 校验成功
-            new_list = UserInfo.objects.create(**serializer.validated_data)
+            # new_list = UserInfo.objects.create(**serializer.validated_data)
+            
+            # 通过查看源码,序列化时实际上是在对self.instance进行序列化
+            # 因此如果自定义的create方法没有return结果值,self.instancce就会为空
+            # 导致serializer.data无法正常拿到结果
+            serializer.save()
+
             return Response(serializer.data)
         else:
             # 校验失败
