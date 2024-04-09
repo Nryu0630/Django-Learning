@@ -9,6 +9,20 @@ from rest_framework.mixins import (
     RetrieveModelMixin,
     DestroyModelMixin,
 )
+from rest_framework.generics import (
+    # 单独封装
+    CreateAPIView,
+    DestroyAPIView,
+    UpdateAPIView,
+    ListAPIView,
+    RetrieveAPIView,
+    # 对多条数据操作的混合封装
+    ListCreateAPIView,
+    # 对单条数据操作的混合封装
+    RetrieveUpdateAPIView,
+    RetrieveDestroyAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
 
 
 class UserInfoView(ListModelMixin, CreateModelMixin, GenericAPIView):
